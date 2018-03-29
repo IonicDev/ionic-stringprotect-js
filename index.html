@@ -1,0 +1,106 @@
+<html>
+    <head>
+        <title>Ionic Hello World</title>
+    </head>
+    <body>
+        <script src='https://preview-api.ionic.com/jssdk/0.2.0/Libs/sdk.bundle.js'></script>
+        <script>
+            var init = function() {
+                sdk = new window.IonicSdk.ISAgent("https://qa-api.in.ionicsecurity.com/jssdk/0.2.0/");
+
+                appData =
+                {
+                    appId: 'helloworld',
+                    userId: 'myuser',
+                    userAuth: 'password123',
+                    registrationUrl: 'https://qa-enrollment.in.ionicsecurity.com/keyspace/OC9F/register'
+                }
+            }
+
+            var register = function() {
+                return sdk.registerUser(appData)
+                .then(resp => {
+                    if(resp)
+                        if (resp.Redirect) {
+                            window.open(resp.Redirect);
+                            return resp.Notifier;
+                        }
+                    else {
+                        return Promise.reject("Error enrolling");
+                    }
+                });
+            }
+
+            var loadProfile = function() {
+                return sdk.loadUser(appData)
+                .then(res => {
+                    return Promise.resolve();
+                })
+                .catch(err => {
+                    if (
+                        err &&
+                        err.sdkResponseCode &&
+                        (err.sdkResponseCode === 40022 || err.sdkResponseCode === 40002)
+                    ) {
+                        return register();
+                    }
+                });
+            }
+
+            var encryptText = function(){
+                var classification = []
+                var ionic_permit_user_by_email = []
+                var data = document.getElementById('fieldToEncrypt').value;
+                ionic_permit_user_by_email.push(document.getElementById('permit-email').value.split(','))
+                classification.push(document.getElementById('classification').value)
+
+                var ionic_key_attributes = {'classification': classification, 'ionic-permit-user-by-email': ionic_permit_user_by_email}
+
+                sdk.encryptStringChunkCipher({stringData: data, cipher: 'v2', mutableAttributes: ionic_key_attributes})
+                .then(res => {
+                    document.getElementById('encryptedText').innerText = res.stringChunk;
+                })
+                .catch(err => {
+                    console.log('err: ', err);
+                });
+            }
+
+            var decryptText = function(){
+                var data = document.getElementById('fieldToDecrypt').value.trim();
+
+                sdk.decryptStringChunkCipher({stringData: data})
+                .then(res => {
+                    document.getElementById('decryptedText').innerText = res.stringChunk;
+                });
+            }
+
+            init();
+            loadProfile();
+        </script>
+
+        <h3>Encrypt String</h3>
+        <p>Plaintext Input: <br><textarea id='fieldToEncrypt' type='text' name='PlainText' cols="180" rows="5"></textarea></p>
+        <p>Allowed Emails: <br><textarea id='permit-email' type='text' cols="180" rows="1"></textarea></p>
+        <p><font color="grey">Multiple entries should be comma separated.</font></p>
+        <p>Classification: 
+            <select id='classification'>
+                <option value="private">Private</option>
+                <option value="public">Public</option>
+            </select>
+        </p>
+        <p><font color="grey">
+            Private: Only the creator and users designated in the Allowed Emails field have access.
+            <br>
+            Public: Any user with an Ionic account has access to the key.
+        </font></p>
+        <input type='button' class='button' id='encrypt-btn' onClick='encryptText()' value='Encrypt'>
+        <p>Encrypted Text: <br><textarea id='encryptedText' type='text' cols="180" rows="5"></textarea></p>
+        <hr>
+        <br>
+        <h3>Decrypt String</h3>
+        <p>Ciphertext Input: <br><textarea id='fieldToDecrypt' type='text' cols="180" rows="5"></textarea></p>
+        <input type='button' class='button' id='decrypt-btn' onClick='decryptText()' value='Decrypt'>
+        <p>Decrypted Text: <br><textarea id='decryptedText' type='text' cols="180" rows="5"></textarea></p>
+
+    </body>
+</html>
