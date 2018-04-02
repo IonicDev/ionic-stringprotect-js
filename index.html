@@ -53,10 +53,28 @@
                 var data = document.getElementById('fieldToEncrypt').value;
                 ionic_permit_user_by_email.push(document.getElementById('permit-email').value.split(','))
                 classification.push(document.getElementById('classification').value)
+                ionic_metadata
 
                 var ionic_key_attributes = {'classification': classification, 'ionic-permit-user-by-email': ionic_permit_user_by_email}
 
-                sdk.encryptStringChunkCipher({stringData: data, cipher: 'v2', mutableAttributes: ionic_key_attributes})
+                var ionic_sdk_type = "JavaScript SDK"
+                var ionic_sdk_version = "0.2.0"
+                var ionic_application_name = "ionic-stringprotect-js"
+                var ionic_application_version = "1.0"
+
+                var ionic_metadata = {
+                    'ionic-sdk-type': ionic_sdk_type,
+                    'ionic-sdk-version': ionic_sdk_version,
+                    'ionic-app-name': ionic_application_name,
+                    'ionic-app-version': ionic_application_version
+                }
+
+                sdk.encryptStringChunkCipher({
+                    stringData: data, 
+                    cipher: 'v2', 
+                    mutableAttributes: ionic_key_attributes, 
+                    metadata: ionic_metadata
+                })
                 .then(res => {
                     document.getElementById('encryptedText').innerText = res.stringChunk;
                 })
