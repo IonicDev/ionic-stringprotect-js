@@ -71,6 +71,9 @@
                 sdk.decryptStringChunkCipher({stringData: data})
                 .then(res => {
                     document.getElementById('decryptedText').innerText = res.stringChunk;
+                })
+                .catch(err => {
+                    document.getElementById('decryptedText').innerText = "**Access Denied**";
                 });
             }
 
