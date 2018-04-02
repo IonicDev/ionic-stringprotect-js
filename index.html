@@ -80,7 +80,10 @@
             init();
             loadProfile();
         </script>
-
+        <p><font color="grey"><center>
+            To use this app, you must enroll with the Ionic Tenant.  Check your browser for a blocked pop-up window, which takes you to the enrollment page.
+        </center></font></p>
+        <hr>
         <h3>Encrypt String</h3>
         <p>Plaintext Input: <br><textarea id='fieldToEncrypt' type='text' name='PlainText' cols="180" rows="5"></textarea></p>
         <p>Allowed Emails: <br><textarea id='permit-email' type='text' cols="180" rows="1"></textarea></p>
@@ -99,7 +102,6 @@
         <input type='button' class='button' id='encrypt-btn' onClick='encryptText()' value='Encrypt'>
         <p>Encrypted Text: <br><textarea id='encryptedText' type='text' cols="180" rows="5"></textarea></p>
         <hr>
-        <br>
         <h3>Decrypt String</h3>
         <p>Ciphertext Input: <br><textarea id='fieldToDecrypt' type='text' cols="180" rows="5"></textarea></p>
         <input type='button' class='button' id='decrypt-btn' onClick='decryptText()' value='Decrypt'>
