@@ -18,7 +18,7 @@
             }
 
             var register = function() {
-                return sdk.enrolluser(appData)
+                return sdk.enrollUser(appData)
                 .then(resp => {
                     if(resp) {
                         if (resp.redirect) {
