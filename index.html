@@ -3,28 +3,29 @@
         <title>Ionic String Protect</title>
     </head>
     <body>
-        <script src='https://dev-api.ionic.com/jssdk/0.2.0/Libs/sdk.bundle.js'></script>
+        <script src='https://dev-api.ionic.com/jssdk/latest/Libs/sdk.bundle.js'></script>
         <script>
             var init = function() {
-                sdk = new window.IonicSdk.ISAgent("https://dev-api.ionic.com/jssdk/0.2.0/");
+                sdk = new window.IonicSdk.ISAgent("https://dev-api.ionic.com/jssdk/latest/");
 
                 appData =
                 {
                     appId: 'helloworld',
                     userId: 'myuser',
                     userAuth: 'password123',
-                    registrationUrl: 'https://dev-enrollment.ionic.com/keyspace/HVzG/register'
+                    enrollmentUrl: 'https://dev-enrollment.ionic.com/keyspace/HVzG/register'
                 }
             }
 
             var register = function() {
-                return sdk.registerUser(appData)
+                return sdk.enrolluser(appData)
                 .then(resp => {
-                    if(resp)
-                        if (resp.Redirect) {
-                            window.open(resp.Redirect);
+                    if(resp) {
+                        if (resp.redirect) {
+                            window.open(resp.redirect);
                             return resp.Notifier;
                         }
+                    }
                     else {
                         return Promise.reject("Error enrolling");
                     }
