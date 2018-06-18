@@ -50,11 +50,9 @@
 
             var encryptText = function(){
                 var classification = []
-                var ionic_permit_user_by_email = []
                 var data = document.getElementById('fieldToEncrypt').value;
-                ionic_permit_user_by_email.push(document.getElementById('permit-email').value.split(','))
+                var ionic_permit_user_by_email = document.getElementById('permit-email').value.split(',')
                 classification.push(document.getElementById('classification').value)
-                ionic_metadata
 
                 var ionic_key_attributes = {'classification': classification, 'ionic-permit-user-by-email': ionic_permit_user_by_email}
 
